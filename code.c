@@ -42,12 +42,12 @@ int partionData(int a[], int low, int high) {
 	a[low] = p;
 	return p;
 }
-void quickSort(int a[], int n,int low,int high) {
+void quickSort(int a[], int low,int high) {
 	if (low<high)
 	{
 		int p = partionData(a,low,high);
-		quickSort(a,n,low,p-1);
-		quickSort(a, n, p + 1, high);
+		quickSort(a, low,p-1);
+		quickSort(a, p + 1, high);
 	}
 }
 
@@ -177,7 +177,7 @@ Link * InitLink() {
 }
 Stack* InitStack() {
 	Stack* s = malloc(sizeof(Stack));
-	s->top = -1;
+	s->top = 0;
 	return s;
 }
 void addStack(Stack* s, int val) {
