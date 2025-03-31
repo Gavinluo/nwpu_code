@@ -238,7 +238,7 @@ int cbd(int a, int b) {
 #pragma region 不熟
 
 void BuidMaxHead(int a[], int n) {
-	//从中间到叶节点逐个调整
+	//从中间到根节点逐个调整
 	for (int i = n / 2 - 1; i >= 0; i--)
 	{
 		Adjust(a, i, n);
@@ -246,7 +246,7 @@ void BuidMaxHead(int a[], int n) {
 }
 void Adjust(int a[], int i, int length) {
 	int temp = a[i];
-	//从左孩子开始
+	//从左孩子往叶子结点开始调
 	for (int k = 2 * i + 1; k < length; k = 2 * k + 1)
 	{
 		if (k + 1 < length && a[k] < a[k + 1])
@@ -320,8 +320,7 @@ int DeQueue(Queue* q) {
 }
 
 void printTime() {
-	time_t t;
-	t = time(NULL);
+	time_t t = time(NULL);
 	struct tm* local;
 	local = localtime(&t);
 
@@ -458,46 +457,51 @@ void prim(MGraph g) {
 		printf("%d -> %d %d \n", path[i],i,dist[i]);
 	}
 }
-void dijkstra(MGraph g,int v) {
-	int dist[MAX];
-	int path[MAX];
-	int isUse[MAX] = { 0 };
-	dist[v] = -1;
-	path[v] = -1;
-	isUse[v] = 1;
-	for (int i = 0; i < g.vexnum; i++)
-	{
-		if (g.edge[v][i]>0)
-		{
-			path[i] = v;
-			dist[i] = g.edge[v][i];
-		}
-		else {
-			dist[i] = INT_MAX;
-		}
-	}
-	int min_vex, min_data;
-	for (int i = 0; i < g.vexnum; i++)
-	{
-		min_data = INT_MAX;
-		for (int j = 0; j < g.vexnum; j++)
-		{
-			if (isUse[j]==0 && g.edge[i][j]<min_data)
-			{
-				min_vex = j;
-				min_data = g.edge[i][j];
-			}
-		}
-		dist[min_vex] = min_data;
-		path[i] = min_vex;
-		isUse[min_vex] = 1;
-		for (int j = 0; j < g.vexnum; j++)
-		{
-			if (isUse[j]==0 && dist[min_vex]+g.edge[min_vex][j]<dist[j])
-			{
-				dist[j] = dist[min_vex] + g.edge[min_vex][j];
-				path[j] = min_vex;
-			}
-		}
-	}
+void dijkstra(MGraph g, int v) {
+    int dist[MAX];
+    int path[MAX];
+    int isUse[MAX] = { 0 };
+
+    for (int i = 0; i < g.vexnum; i++) {
+        if (g.edge[v][i] > 0 && i != v) {
+            dist[i] = g.edge[v][i];
+            path[i] = v;
+        } else {
+            dist[i] = INT_MAX;
+            path[i] = -1;
+        }
+    }
+
+    dist[v] = 0;
+    isUse[v] = 1;
+
+    for (int i = 1; i < g.vexnum; i++) {
+        int min_data = INT_MAX;
+        int min_vex = -1;
+
+        for (int j = 0; j < g.vexnum; j++) {
+            if (!isUse[j] && dist[j] < min_data) {
+                min_vex = j;
+                min_data = dist[j];
+            }
+        }
+
+        if (min_vex == -1) break;
+
+        isUse[min_vex] = 1;
+
+        for (int j = 0; j < g.vexnum; j++) {
+            if (!isUse[j] && g.edge[min_vex][j] > 0 &&
+                dist[min_vex] + g.edge[min_vex][j] < dist[j]) {
+                dist[j] = dist[min_vex] + g.edge[min_vex][j];
+                path[j] = min_vex;
+            }
+        }
+    }
+
+    // 输出结果可以加上 dist[] 和 path[] 打印
+}
+
+		
+	
 }
