@@ -429,23 +429,23 @@ void prim(MGraph g) {
 			dist[i] =INT_MAX;
 		}
 	}
-	int min_vex, min_data;
+	int min_vex = -1, min_data;
 	for (int i = 1; i < g.vexnum; i++)
 	{
-		min_data = MAX;
+		min_data = INT_MAX;
 		for (int j = 0; j < g.vexnum; j++)
 		{
-			if (dist[j]!=-1 && dist[j]<min_data)
+			if (isUse[j]==0 && dist[j]<min_data)
 			{
 				min_vex = j;
 				min_data = dist[j];
 			}
 		}
-		path[i] = min_vex;
+		
 		isUse[min_vex] = 1;
 		for (int j = 0; j < g.vexnum; j++)
 		{
-			if (isUse[j]==0 && dist[j]<g.edge[min_vex][j])
+			if (isUse[j]==0 && dist[j]>g.edge[min_vex][j])
 			{
 				dist[j] = g.edge[min_vex][j];
 				path[j] = min_vex;
