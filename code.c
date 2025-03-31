@@ -177,7 +177,7 @@ Link * InitLink() {
 }
 Stack* InitStack() {
 	Stack* s = malloc(sizeof(Stack));
-	s->top = 0;
+	s->top = -1;
 	return s;
 }
 void addStack(Stack* s, int val) {
